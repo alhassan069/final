@@ -35,40 +35,55 @@
         }
     </style>
 </head>
+<script type="module">
+    import navbar from "./components/navbar.js";
+    let navbar_div = document.getElementById("navbar1");
+    navbar_div.innerHTML = navbar();
+</script>
+
 
 <body>
-    <div id="navbar">
-        <h3><a href="h1.html">Home</a></h3>
-
-        <div id="options">
-            <input type="text" id="query" placeholder="Search any news">
-            <input type="submit" id="ffg" onclick="search()">
-            <h3><a href="latestRecepe.html">Latest Recepe</a></h3>
-            <h3><a href="recepeOfTheDay.html">Recepe of the day!</a></h3>
-        </div>
-    </div>
-
+    <div id="navbar1"></div>
     <div id="container"></div>
 </body>
 <script>
+    async function getData(url) {
+        let res = await fetch(url);
+        let data = await res.json();
+
+        return data.meals;
+    }
+
+    let gt = getData(`https://www.themealdb.com/api/json/v1/1/random.php`);
+    gt.then((res) => {
+
+
+        show(res[0]);
+
+        // console.log(res);
+    })
+        .catch((err) => {
+            console.log(err);
+        });
+
     var n = document.getElementById("container");
 
-    var details = JSON.parse(localStorage.getItem('recepeDetail'));
-    console.log(details);
-    show(details);
+    // var details = gt;
+
+    // 
 
     function show(details) {
         let div = document.createElement("div");
         let title = document.createElement("h3");
-        title.textContent = details.title;
+        title.textContent = details.strMeal;
         let image = document.createElement("img");
-        image.src = details.image;
+        image.src = details.strMealThumb;
         let content = document.createElement("p");
-        content.innerText = details.category;
+        content.innerText = details.strCategory;
         let description = document.createElement("p");
-        description.innerText = details.instructions;
-        let continueReading = document.createElement("a");
-        continueReading.src = details.youtube;
+        description.innerText = details.strInstructions;
+        let continueReading = document.createElement("p");
+        // continueReading.innerHTML = <a href='${details.strYoutube}' >Watch on youtube</a> ;
 
         div.append(title, image, content, description, continueReading);
         n.appendChild(div);
