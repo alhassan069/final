@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>homepage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="navbar">
+        <h3><a href="/">Home</a></h3>
+
+        <div id="options">
+            <input type="text" id="query" placeholder="Search any news">
+            <input type="submit" id="ffg" onclick="search()">
+            <h3><a href="latestRecepe.html">Latest Recepe</a></h3>
+            <h3><a href="recepeOfTheDay.html">Recepe of the day!</a></h3>
+        </div>
+    </div>
+
+    <div id="container"></div>
+</body>
+<script>
+     async function getData(url) {
+        let res = await fetch(url);
+        let data = await res.json();
+
+        return data.meals;
+    }
+
+    function appendData(data, container) {
+    for (let i = 0; i<data.length; i++){
+        let el = data[i];
+        let div = document.createElement('div');
+        let p = document.createElement('p');
+
+        p.innerText = el.strMeal;
+
+        let img = document.createElement("img");
+
+        img.src = el.strMealThumb;
+
+        div.append(img,p);
+
+        container.append(div);
+
+        div.onclick = function detailedRecepe() {
+            let title = el.strMeal;
+            let instructions = el.strInstructions;
+            let category = el.strCategory;
+            let image = el.strMealThumb;
+            let youtube = el.strYoutube;
+
+            let obj = {
+                title,
+                category,
+                instructions,
+                image,
+                youtube,
+            }
+
+            var newDat = obj;
+            var recepeDetail = JSON.stringify(newDat);
+            // console.log(deetail);
+            localStorage.setItem('recepeDetail', recepeDetail);
+
+            window.location.href = "details.html";
+        };
+    }
+}
+
+    function search() {
+        let container = document.getElementById("container");
+        container.innerHTML = null;
+        let dat = document.getElementById("query").value;
+
+        let gt = getData(`https://www.themealdb.com/api/json/v1/1/search.php?s=${dat}`);
+
+
+        gt.then((res) => {
+
+           
+            appendData(res, container);
+
+            // console.log(res);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // window.location.href = "search.html";
+
+    }
+</script>
+</html>

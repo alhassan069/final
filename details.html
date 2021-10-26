@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recepe</title>
+    <style>
+        #navbar {
+            display: flex;
+            justify-content: space-between;
+            padding-left: 4%;
+            padding-right: 4%;
+            border: solid 1px black;
+            text-decoration: none;
+        }
+
+        #options {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input {
+            font-size: small;
+        }
+
+        #options h3 {
+            padding-left: 50px;
+            padding-right: 10px;
+        }
+
+        img {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar">
+        <h3><a href="/">Home</a></h3>
+
+        <div id="options">
+            <input type="text" id="query" placeholder="Search any news">
+            <input type="submit" id="ffg" onclick="search()">
+            <h3><a href="latestRecepe.html">Latest Recepe</a></h3>
+            <h3><a href="recepeOfTheDay.html">Recepe of the day!</a></h3>
+        </div>
+    </div>
+
+    <div id="container"></div>
+</body>
+<script>
+    var n = document.getElementById("container");
+
+    var details = JSON.parse(localStorage.getItem('recepeDetail'));
+    console.log(details);
+    show(details);
+
+    function show(details) {
+        let div = document.createElement("div");
+        let title = document.createElement("h3");
+        title.textContent = details.title;
+        let image = document.createElement("img");
+        image.src = details.image;
+        let content = document.createElement("p");
+        content.innerText = details.category;
+        let description = document.createElement("p");
+        description.innerText = details.instructions;
+        let continueReading = document.createElement("a");
+        continueReading.src = details.youtube;
+
+        div.append(title, image, content, description, continueReading);
+        n.appendChild(div);
+
+    }
+</script>
+
+</html>
